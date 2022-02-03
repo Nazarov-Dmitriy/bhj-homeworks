@@ -8,8 +8,9 @@ function cookieClicker() {
         img.width == 200 ? (img.width = 400) : (img.width = 200);
         clickValue.textContent = Number(clickValue.textContent) + 1;
         let end = new Date();
-        averageValue = (clickValue.textContent / ((end - start) / 1000)).toFixed(2);
+        averageValue = (1 / ((end - start) / 1000)).toFixed(2);
         document.getElementById('click__average').textContent = averageValue;
+        start = new Date();
     };
 }
 

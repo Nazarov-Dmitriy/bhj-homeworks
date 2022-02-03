@@ -26,6 +26,8 @@ function countDown() {
                 document.getElementById('timer').textContent = '00:00:00';
                 clearInterval(timeInterval);
                 alert('«Вы победили в конкурсе!»');
+               
+                document.querySelector('#black').click();
             }
         }
     }
