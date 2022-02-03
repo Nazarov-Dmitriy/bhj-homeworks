@@ -17,7 +17,6 @@ document.querySelectorAll('.hole-game')[0].onclick = (e) => {
         document.getElementById('dead').textContent = dead;
         document.getElementById('lost').textContent = lost;
     }
-    console.log(lost);
     if (lost == 5) {
         alert('Проигрыш');
         dead = 0;
@@ -26,4 +25,3 @@ document.querySelectorAll('.hole-game')[0].onclick = (e) => {
         document.getElementById('lost').textContent = lost;
     }
 };
-

@@ -43,3 +43,8 @@ body {
   top: 100%;
   min-width: 100%;
 }
+
+.both{
+  width: 100px;
+  height: 500px;
+}
