@@ -1,4 +1,4 @@
-function slider(selector, activClass, selectorTabs, TabsActive) {
+function slider(selector, activClass, selectorTabs, tabsActive) {
     let arrowNext = document.querySelector('.slider__arrow_next');
     let arrowPrev = document.querySelector('.slider__arrow_prev');
     let content = document.querySelectorAll(selector);
@@ -15,40 +15,37 @@ function slider(selector, activClass, selectorTabs, TabsActive) {
     }
 
     function seachIndex() {
-        i = 0;
-        content.forEach((item, index) => {
-            if (item.classList.contains(activClass)) {
-                i = index;
-            }
+        return Array.from(content).findIndex(function (element) {
+            return element.classList.contains(activClass);
         });
-        return i;
+
     }
 
     arrowNext.onclick = () => {
         let i = seachIndex();
         hideItem(content, activClass);
-        hideItem(tabs, TabsActive);
+        hideItem(tabs, tabsActive);
         if (i + 1 > content.length - 1) {
             i = 0;
             showItem(content, i, activClass);
-            showItem(tabs, i, TabsActive);
+            showItem(tabs, i, tabsActive);
         } else {
             showItem(content, i + 1, activClass);
-            showItem(tabs, i + 1, TabsActive);
+            showItem(tabs, i + 1, tabsActive);
         }
     };
 
     arrowPrev.onclick = () => {
         let i = seachIndex();
         hideItem(content, activClass);
-        hideItem(tabs, TabsActive);
+        hideItem(tabs, tabsActive);
         if (i - 1 < 0) {
             i = content.length - 1;
             showItem(content, i, activClass);
-            showItem(tabs, i, TabsActive);
+            showItem(tabs, i, tabsActive);
         } else {
             showItem(content, i - 1, activClass);
-            showItem(tabs, i - 1, TabsActive);
+            showItem(tabs, i - 1, tabsActive);
         }
     };
 
@@ -56,9 +53,9 @@ function slider(selector, activClass, selectorTabs, TabsActive) {
         tabs.forEach((item, index) => {
             item.onclick = () => {
                 hideItem(content, activClass);
-                hideItem(tabs, TabsActive);
+                hideItem(tabs, tabsActive);
                 showItem(content, index, activClass);
-                showItem(tabs, index, TabsActive);
+                showItem(tabs, index, tabsActive);
             };
         });
     }

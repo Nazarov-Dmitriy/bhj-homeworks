@@ -10,14 +10,14 @@ function dropMenu(selector, selectorActiv) {
     let arr = document.querySelectorAll(selector);
     arr.forEach(item => {
         item.onclick = () => {
-            if (item.nextElementSibling.tagName == 'UL' && !item.nextElementSibling.classList.contains(selectorActiv)) {
-                hidenActive(arr, selectorActiv);
-                item.nextElementSibling.classList.add(selectorActiv);
-                return false;
-            } else {
-                item.nextElementSibling.classList.remove(selectorActiv);
-                return false;
+            if (item.nextElementSibling !== null) {
+                if (!item.nextElementSibling.classList.contains(selectorActiv)) {
+                    hidenActive(arr, selectorActiv);
+                    item.nextElementSibling.classList.add(selectorActiv);
+                    return false;
+                }
             }
+        
         };
     });
 }
