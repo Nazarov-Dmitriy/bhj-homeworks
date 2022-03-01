@@ -2,24 +2,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let carts = document.querySelectorAll('.cart__product');
     let cartsList = document.querySelector('.cart__products');
     cartsList.parentElement.style.display = 'none';
+    let cartsLocalStorage = [];
 
-    for (let key in localStorage) {
-        if (!localStorage.hasOwnProperty(key)) {
-            continue;
-        }
-        let a = document.querySelector('[data-id="' + key + '"]').children[1].getAttribute('src');
-        cartsList.innerHTML += `
-        <div class="cart__product" data-id="${key}">
-            <img class="cart__product-image" src="${a}">
-            <div class="cart__product-count">${localStorage.getItem(key)}</div>
-        </div>
-        `;
 
-        if (localStorage.length > 0) {
+    if (localStorage.getItem('cart') !== null) {
+        JSON.parse(localStorage.cart).forEach(element => {
+            cartsLocalStorage.push(element);
+            cartsList.innerHTML += `
+            <div class="cart__product" data-id="${element.id}">
+                <img class="cart__product-image" src="${element.src}">
+                <div class="cart__product-count">${element.count}</div>
+            </div>
+            `;
             cartsList.parentElement.style.display = 'block';
-        }
+        });
         carts = document.querySelectorAll('.cart__product');
-
     }
 
     function addProduct(e) {
@@ -33,7 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (producAttribute == item.getAttribute('data-id')) {
                     item.children[1].textContent = Number(item.children[1].textContent) + +count;
                     containsCatr++;
-                    localStorage.setItem(item.getAttribute('data-id'), item.children[1].textContent);
+                    cartsLocalStorage.forEach(elem => {
+                        if (elem.id === producAttribute) {
+                            elem.count = Number(item.children[1].textContent);
+                        }
+                    });
+                    localStorage.setItem('cart', JSON.stringify(cartsLocalStorage));
                 }
             });
 
@@ -45,7 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 `;
                 carts = document.querySelectorAll('.cart__product');
-                localStorage.setItem(producAttribute, count);
+                let obj = {};
+                obj.id = producAttribute;
+                obj.src = e.target.closest('.product').children[1].getAttribute('src');
+                obj.count = count.trim();
+                cartsLocalStorage.push(obj);
+                localStorage.setItem('cart', JSON.stringify(cartsLocalStorage));
                 if (cartsList.parentElement.style.display == 'none') {
                     cartsList.parentElement.style.display = 'block';
                 }
@@ -60,15 +67,27 @@ document.addEventListener('DOMContentLoaded', () => {
             let producAttribute = e.target.closest('.product').getAttribute('data-id');
 
             carts.forEach(item => {
-                console.log(item);
+                carts = document.querySelectorAll('.cart__product');
                 if (producAttribute == item.getAttribute('data-id')) {
-                    if (Number(item.children[1].textContent) < 2) {
-                        item.remove();
-                        localStorage.removeItem(item.getAttribute('data-id'));
-                    } else {
+                    if (Number(item.children[1].textContent) > 1 && Number(item.children[1].textContent) > Number(count)) {
                         item.children[1].textContent = Number(item.children[1].textContent) - +count;
-                        localStorage.setItem(item.getAttribute('data-id'), item.children[1].textContent);
-
+                        cartsLocalStorage.forEach(elem => {
+                            if (elem.id === producAttribute) {
+                                elem.count = Number(item.children[1].textContent);
+                            }
+                        });
+                        localStorage.setItem('cart', JSON.stringify(cartsLocalStorage));
+                    } else {
+                        item.remove();
+                        cartsLocalStorage.forEach((elem, index) => {
+                            if (elem.id === producAttribute) {
+                                cartsLocalStorage.splice(index, 1);
+                                localStorage.setItem('cart', JSON.stringify(cartsLocalStorage));
+                            }
+                            if (cartsLocalStorage.length == 0) {
+                                localStorage.removeItem('cart');
+                            }
+                        });
                     }
                 }
             });
@@ -78,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
 
 
     document.addEventListener('click', (e) => {
@@ -91,9 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.target.parentElement.querySelector('.product__quantity-value').textContent--;
             }
         }
-
         addProduct(e);
         remove(e);
-
     });
 });
