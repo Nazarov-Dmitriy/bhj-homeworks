@@ -1,4 +1,4 @@
-document.getElementById("file").onchange = function() {
+document.getElementById("file").onchange = function(e) {
   const fileDesc = document.querySelector(".input__wrapper-desc");
   let fileName = this.value.split("\\");
   fileName = fileName[fileName.length - 1];
